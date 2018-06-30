@@ -3,5 +3,8 @@
   "version": "0.0.1",
   "scripts": {
     "deploy:surge": "yarn surge $PWD/dist/ https://test-deploy-$(git rev-parse --abbrev-ref HEAD).surge.sh"
+  },
+  "dependencies": {
+    "surge": "^0.20.1"
   }
 }
