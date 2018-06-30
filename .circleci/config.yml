@@ -1,0 +1,32 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+
+version: 2
+defaults: &defaults
+  working_directory: ~/deployments-and-tests
+  docker:
+    - image: circleci/node:8.0
+jobs:
+  surge-deploy:
+    <<: *defaults
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "yarn.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+      - run:
+          command: yarn && yarn deploy:surge
+
+workflows:
+  version: 2
+  # every time some commit is pushed a new deploy to Surge will be triggered 
+  surge-deploy:
+    jobs:
+      - surge-deploy:
+         filters:
+           branches:
+             only: master
